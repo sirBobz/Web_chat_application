@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            
+            <h1 class="text-center">My favorite Foods</h1>
+            
+        </div>
+    </div>
+    <hr>
+      {% for foodpost in foodposts %}
+    
+        {% if forloop.last %}
+           <div class="row">
+                <div class="col-md-6">
+                    <div class="postmini">
+                        {%if foodpost.photo %} 
+                        <img class = "img-responsive img-rounded foodimage center-block" src="{{foodpost.photo.url}}">  
+                        {% endif %}
+                        <h1 class="posttitle text-center"><a href="{% url 'food_detail' pk=foodpost.pk %}">{{ foodpost.title }}</a></h1>
+                        <div class="row">
+                        <div class="col-md-6">Author: {{ foodpost.author }}</div>
+                        
+                        <div class="col-md-6"> Published: {{ foodpost.published_date|date:'m-d-Y' }}<!--|date:'m-d-Y' --></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p>{{ foodpost.text|linebreaks|truncatechars:100  }}</p>
+                            </div>
+                        </div>
+                          <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <a href="{% url 'crafts.views.craft_detail' pk=foodpost.pk %}" class="commenta">Comments: {{ foodpost.approved_comments.count }}</a>
+                            </div>
+                        {% if user.is_superuser %}
+                        
+                            <div class="col-md-6">
+                            Pending: {{ foodpost.unapproved_comments.count  }}
+                            </div>
+
+                        {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% for craftpost in craftposts %}
+        {% if forlooop.last %}
+                <div class="col-md-6">
+                    <div class="postmini">
+                        {%if craftpost.photo %} 
+                        <img class = "img-responsive img-rounded craftimage center-block" src="{{craftpost.photo.url}}">  
+                        {% endif %}
+                        <h1 class="posttitle text-center"><a href="{% url 'craft_detail' pk=craftpost.pk %}">{{ craftpost.title }}</a></h1>
+                        <div class="row">
+                        <div class="col-md-6">Author: {{ craftpost.author }}</div>
+                        
+                        <div class="col-md-6"> Published: {{ craftpost.published_date|date:'m-d-Y' }}<!--|date:'m-d-Y' --></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p>{{ craftpost.text|linebreaks|truncatechars:100  }}</p>
+                            </div>
+                        </div>
+                          <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="{% url 'crafts.views.craft_detail' pk=craftpost.pk %}" class="commenta">Comments: {{ craftpost.approved_comments.count }}</a>
+                            </div>
+                             {% if user.is_superuser %}
+                            <div class="col-md-6">
+                                Pending: {{ craftpost.unapproved_comments.count  }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+                
+                {% endif %}
+                {% endfor %}
+   {% endblock %}

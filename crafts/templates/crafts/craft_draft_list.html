@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+           
+            <h1 class="text-center">My Drafts</h1>
+                        
+        </div>
+    </div>
+    <hr>
+    {% for draftpost in draftposts %}
+        {% if request.user == draftpost.author or user.is_superuser %}
+            {% if forloop.counter0|divisibleby:2 %}
+           <div class="row">
+                <div class="col-md-6">
+                 <div class="postmini">
+                {%if draftpost.photo %} 
+                    <img class = "img-responsive img-rounded craftimage center-block" src="{{ draftpost.photo.url}}" alt="post image">  
+                    {% endif %}
+                {% if draftpost.postcategory == "Craft" %}
+                    <h1 class="text-center posttitle"><a href="{% url 'crafts.views.craft_detail' pk=draftpost.pk %}">{{ draftpost.title }}</a></h1>
+                {% elif draftpost.postcategory == "Food" %}
+                    <h1 class="text-center posttitle"><a href="{% url 'crafts.views.food_detail' pk=draftpost.pk %}">{{ draftpost.title }}</a></h1>
+                {% endif %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Author: {{ draftpost.author }}</p>
+                            <p>Category: {{ draftpost.postcategory }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p> Created: {{ draftpost.created_date|date:'d-m-Y' }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>{{ draftpost.text|linebreaks|truncatechars:100 }}</p>
+                            
+                        </div>
+                     </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-md-6">
+                 <div class="postmini">
+                {%if draftpost.photo %} 
+                    <img class = "img-responsive img-rounded craftimage center-block" src="{{ draftpost.photo.url}}" alt="post image">  
+                    {% endif %}
+                {% if draftpost.postcategory == "Craft" %}
+                    <h1 class="text-center posttitle"><a href="{% url 'crafts.views.craft_detail' pk=draftpost.pk %}">{{ draftpost.title }}</a></h1>
+                {% elif draftpost.postcategory == "Food" %}
+                    <h1 class="text-center posttitle"><a href="{% url 'crafts.views.food_detail' pk=draftpost.pk %}">{{ draftpost.title }}</a></h1>
+                {% endif %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Author: {{ draftpost.author }}</p>
+                            <p>Category: {{ draftpost.postcategory }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p> Created: {{ draftpost.created_date|date:'d-m-Y' }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>{{ draftpost.text|linebreaks|truncatechars:100 }}</p>
+                            
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% if forloop.last and forloop.counter0|divisibleby:2%}
+                    
+        </div>
+                {% endif %}  
+        {%  empty %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="post">
+        <h1 class="posttitle"> You have no pending blog posts. <a href="/new">Go write something!!</a> </h1>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <hr>
+{% endblock %}

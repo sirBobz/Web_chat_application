@@ -1,0 +1,148 @@
+{% load staticfiles %}
+{% load postman_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>web chat</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <!--fonts and icons-->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <!--to get lato font-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:500,400,300,100" rel="stylesheet">
+    <!--bootstrap-->
+    <link  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!--custom style sheet-->
+    <link href="{% static 'css/crafts.css' %}" rel="stylesheet">
+       {{ form.media }}
+       <script type="text/javascript">
+        tinyMCE.init({
+                mode: "textareas",
+                theme: "advanced"
+
+        });
+</script>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar1">
+        <div class="container-fluid">
+            <div class="navbar-header navbar-right text-uppercase">
+                <a class="navbar-brand title-super" href="/">WEB CHAT</a>
+                <h4 class="subtitle">Django Web Community</h4><button aria-expanded=
+                "false" class="navbar-toggle collapsed" data-target=
+                "#bs-example-navbar-collapse-1" data-toggle="collapse" type=
+                "button"><span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a href="/crafts">Crafts</a>
+                    </li>
+                    <li>
+                        <a href="/food">Food</a>
+                    </li>
+                     {% if user.is_authenticated %}
+                     <li>
+                        <a href="/users">Users</a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href=
+                        "#"> Hello {{ user.username }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{% url 'django.contrib.auth.views.logout' %}"> Log out</a>
+                            </li>
+                            <li>
+                                <a href="/messages/inbox">Check messages</a>
+                            </li>
+                            <li>
+                                <a href="/myprofile">My Page</a>
+                            </li>
+                            <li>
+                                <a href="mailto:bobmwenda05@gmail.com">Contact Admin</a>
+                            </li>
+                        </ul>
+                    </li>
+                     {% else %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href=
+                        "#">Accounts<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                 <a href="{% url 'django.contrib.auth.views.login' %}" class="username-menu">Login</a>
+                            </li>
+                            <li>
+                                <a href= "/register">Sign-up</a>
+                            </li>
+                        </ul>
+                    </li>
+                   {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+<!--submenu for messages and mail -->
+{% if user.is_authenticated %}
+    <nav class="navbar navbar-default navbar2">
+        <div class="container-fluid">
+        <a class="navbar-brand title-super2 inbox text-uppercase" href="/messages/inbox">Inbox {% postman_unread as unread_count %}
+{% if unread_count %}<strong>({{ unread_count }})</strong>{% endif %}
+</a>
+            <div class="navbar-header navbar-right text-uppercase">
+                <button aria-expanded=
+                "false" class="navbar-toggle collapsed" data-target=
+                "#bs-example-navbar-collapse-3" data-toggle="collapse" type=
+                "button"><span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-3">
+                <ul class="nav navbar-nav">
+                     <li><a href="/messages/write">Write</a></li>
+                    <li><a href="/messages/sent">Sent</a></li>
+                    <li><a href="/messages/archives">Archive</a></li>
+                    <li><a href="/messages/trash">Trash</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                     <li><a href="{% url 'craft_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span> Add Post</a></li>
+                <li><a href="{% url 'craft_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span> Drafts</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+ {% endif %}
+
+    <div class="container contentcontainer">
+
+        {% block content %}
+        {% endblock %}
+
+
+    </div><!--container-->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                Made with love by <a href="https://twitter.com/SirBobz">BOB</a>
+
+                </div>
+            </div>
+        </div>
+    </footer><!-- <script src="http://code.jquery.com/jquery.js"></script>-->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+    </body>
+</html>

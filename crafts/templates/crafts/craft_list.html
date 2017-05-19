@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            
+            <h1 class="text-center">Crafts</h1>
+            
+        </div>
+    </div>
+    <hr>
+
+        {% for craftpost in craftposts %}
+
+        {% if forloop.counter0|divisibleby:2 %}
+        
+          <div class="row">
+            <div class="col-md-6">
+                    <div class="postmini">
+                        <div class="row imagerow">
+                        {% if craftpost.photo %} 
+                        <img class = "img-responsive img-rounded craftimage center-block" src="{{craftpost.photo.url}}">  
+                        {% endif %}
+                        </div>
+                        <h1 class="posttitle text-center"><a href="{% url 'craft_detail' pk=craftpost.pk %}">{{ craftpost.title }}</a></h1>
+                        <div class="row">
+                        <div class="col-md-6">Author: {{ craftpost.author }}</div>
+                        
+                        <div class="col-md-6"> Published: {{ craftpost.published_date|date:'m-d-Y' }}<!--|date:'m-d-Y' --></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p>{{ craftpost.text|linebreaks|truncatechars:100  }}</p>
+                            </div>
+                        </div>
+                          <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <a href="{% url 'crafts.views.craft_detail' pk=craftpost.pk %}" class="commenta">Comments: {{ craftpost.approved_comments.count }}</a>
+                            </div>
+                        {% if user.is_superuser %}
+                        
+                            <div class="col-md-6">
+                        Pending: {{ craftpost.unapproved_comments.count  }}
+                            </div>
+                            {% else %}
+                            <div class="col-md-6">
+                            </div>
+                              {% endif %}
+                            
+                        </div>
+                    </div><!--post 1 close-->
+                </div>
+         
+               
+        {% elif not forloop.counter0|divisibleby:2 %}
+                <div class="col-md-6">
+                    <div class="postmini">
+                        <div class="row imagerow">
+                            {%if craftpost.photo %} 
+                            <img class = "img-responsive img-rounded craftimage center-block" src="{{craftpost.photo.url}}">  
+                            {% endif %}
+                        </div>
+                        <h1 class="posttitle text-center"><a href="{% url 'craft_detail' pk=craftpost.pk %}">{{ craftpost.title }}</a></h1>
+                        <div class="row">
+                        <div class="col-md-6">Author: {{ craftpost.author }}</div>
+                        
+                        <div class="col-md-6"> Published: {{ craftpost.published_date|date:'m-d-Y' }}<!--|date:'m-d-Y' --></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p>{{ craftpost.text|linebreaks|truncatechars:100  }}</p>
+                            </div>
+                        </div>
+                          <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <a href="{% url 'crafts.views.craft_detail' pk=craftpost.pk %}" class="commenta">Comments: {{ craftpost.approved_comments.count }}</a>
+                            </div>
+                        {% if user.is_superuser %}
+                        
+                            <div class="col-md-6">
+                        Pending: {{ craftpost.unapproved_comments.count  }}
+                            </div>
+                             {% endif %}
+                        </div>
+                    </div>
+                </div>
+                </div>
+                {% endif %}
+                {% if forloop.last and forloop.counter0|divisibleby:2%}
+                    
+        </div>
+                {% endif %}  
+                {% empty %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+        {% if user.is_authenticated %}
+        <div class="post">
+            <h1>No posts yet. Why not write one?!</h1>
+            <div class="posttitle">
+            <a href="/new"><h1> Add post</h1></a>
+
+            </div>
+        </div>
+        {% else %}
+            <div class="post">
+                <h1>No posts yet. Why not register and write one?!</h1>
+                <div class="posttitle">
+                <a href="/register"><h1> Register</h1></a>
+
+            </div>
+        </div>
+        
+        {% endif %}
+    </div>
+    </div>
+    {% endfor %}
+{% endblock %}

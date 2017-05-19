@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+{% if form.errors %}
+<div class="row">
+    <div class="col-md-12">
+        <p> There's a problem with your registration, please <a href="mailto:rachell.calhoun@gmail.com">Contact us! </a>Sorry for the inconvenience!</p>
+    </div>
+</div>
+{% endif %}
+
+
+
+
+<div class="post">
+
+<div class="row">
+        <div class="center-block col-md-6 text-center">
+            <form method="post" action="/register/" enctype="multipart/form-data">
+               {% csrf_token %}
+                <h4 class=""><label for="id_username">Username:</label></h4>
+                <h4> <input id="id_username" maxlength="30" name="username" type="text"></h4>
+                <h4 class=""><label for="id_email">Email:</label></h4>
+                <h4> <input id="id_email" name="email" type="email"></h4>
+                <h4 class=""><label for="id_password1">Password:</label></h4>
+                <h4><input id="id_password1" name="password1" type="password"></h4>
+
+                <h4 class=""><label for="id_password2">Password confirmation:</label></h4>
+                <h4><input id="id_password2" name="password2" type="password"></h4>
+
+                <h4 class=""><label for="id_hobby">Hobby:</label></h4>
+                <h4> <input id="id_hobby" maxlength="200" name="hobby" type="text"></h4>
+                <h4 class=""><label for="id_location">Location:</label></h4>
+                <h4> <input id="id_location" name="location" type="text"></h4>
+                <h4 class=""><label for="id_picture">Photo:</label></h4>
+                <h4><input id="id_picture" name="picture" type="file"></h4>
+
+
+                 <input value="sign-up" type="submit">
+                <input name="next" value="" type="hidden">
+
+
+             </form>
+        </div>
+
+
+</div>
+</div>
+
+<!--
+
+<div class="post">
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="alreadyreg">You're already registered! You rock!</h1>
+    </div>
+</div>
+</div>-->
+
+
+{% endblock %}

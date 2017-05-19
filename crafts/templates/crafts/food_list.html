@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            
+            <h1 class="text-center">Delicious Foods</h1>
+            
+        </div>
+    </div>
+    <hr>
+       
+    
+    
+      {% for foodpost in foodposts %}
+    
+        {% if forloop.counter0|divisibleby:2 %}
+           <div class="row">
+                <div class="col-md-6">
+                    <div class="postmini">
+
+                        {%if foodpost.photo %} 
+                        <img class = "img-responsive img-rounded foodimage center-block" src="{{foodpost.photo.url}}">  
+                        {% endif %}
+                        <h1 class="posttitle text-center"><a href="{% url 'food_detail' pk=foodpost.pk %}">{{ foodpost.title }}</a></h1>
+                        <div class="row">
+                        <div class="col-md-6">Author: {{ foodpost.author }}</div>
+                        
+                        <div class="col-md-6"> Published: {{ foodpost.published_date|date:'m-d-Y' }}<!--|date:'m-d-Y' --></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p>{{ foodpost.text|linebreaks|truncatechars:100  }}</p>
+                            </div>
+                        </div>
+                          <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <a href="{% url 'crafts.views.craft_detail' pk=foodpost.pk %}" class="commenta">Comments: {{ foodpost.approved_comments.count }}</a>
+                            </div>
+                        {% if user.is_superuser %}
+                        
+                            <div class="col-md-6">
+                            Pending: {{ foodpost.unapproved_comments.count  }}
+                            </div>
+
+                        {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                
+        {% elif not forloop.counter0|divisibleby:2 %}
+                <div class="col-md-6">
+                    <div class="postmini">
+                        {%if foodpost.photo %} 
+                        <img class = "img-responsive img-rounded foodimage center-block" src="{{foodpost.photo.url}}">  
+                        {% endif %}
+                        <h1 class="posttitle text-center"><a href="{% url 'food_detail' pk=foodpost.pk %}">{{ foodpost.title }}</a></h1>
+                        <div class="row">
+                        <div class="col-md-6">Author: {{ foodpost.author }}</div>
+                        
+                        <div class="col-md-6"> Published: {{ foodpost.published_date|date:'m-d-Y' }}<!--|date:'m-d-Y' --></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                            <p>{{ foodpost.text|linebreaks|truncatechars:100  }}</p>
+                            </div>
+                        </div>
+                          <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="{% url 'crafts.views.food_detail' pk=foodpost.pk %}" class="commenta">Comments: {{ foodpost.approved_comments.count }}</a>
+                            </div>
+                             {% if user.is_superuser %}
+                            <div class="col-md-6">
+                                Pending: {{ foodpost.unapproved_comments.count  }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+                
+                {% endif %}
+                {% if forloop.last and forloop.counter0|divisibleby:2%}
+                    
+                
+                </div>
+                {% endif %}
+                {% empty %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+        {% if user.is_authenticated %}
+        <div class="post">
+            <h1>No posts yet. Why not write one?!</h1>
+            <div class="posttitle">
+            <a href="/new"><h1> Add post</h1></a>
+
+            </div>
+        </div>
+        {% else %}
+            <div class="post">
+                <h1>No posts yet. Why not register and write one?!</h1>
+                <div class="posttitle">
+                <a href="/register"><h1> Register</h1></a>
+
+            </div>
+        </div>
+        
+        {% endif %}
+    </div>
+    </div>
+                {% endfor %}
+   {% endblock %}

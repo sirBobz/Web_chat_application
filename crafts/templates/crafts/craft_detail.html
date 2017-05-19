@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="post">
+
+        <div class="row">
+	        <div class="col-md-12 col-lg-12">
+		        <h1 class="text-center">{{ craftpost.title }}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-6">
+                  <p>Author: {{ craftpost.author }}</p>
+            </div>
+
+			    {% if craftpost.published_date %}
+                <div class="col-md-6 col-lg-6text-right">
+	                {{ craftpost.published_date }}
+                </div>
+                {% else %}
+                <div class="col-md-6 col-lg-6 text-right">
+                    {% if request.user == craftpost.author or user.is_superuser %}
+                        <a class="btn btn-default" href="{% url 'crafts.views.craft_publish' pk=craftpost.pk %}">Publish</a>
+                 </div>
+                    {% endif %}
+                {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 center-block">
+                {%if craftpost.photo %} <img class = "img-responsive img-rounded craftimage center-block" src="{{ craftpost.photo.url }}">  {% endif %}
+                <div class="twothirds center-block">
+                <p>{{ craftpost.text|safe }}</p>
+
+                {% if craftpost.link %}
+                <a href="{{ craftpost.link }}"> {{craftpost.link}}</a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if user.is_authenticated and request.user == craftpost.author %}
+        <div class="row">
+            <div class="col-md-6 col-lg-6">
+                <div class="halfwidth center-block">
+                    <a class="btn btn-info" href="{% url 'crafts.views.craft_edit' pk=craftpost.pk %}"><span class=" glyphicon glyphicon-pencil"> Edit </span></a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6">
+                <div class="halfwidth center-block">
+                    <a class="btn btn-danger " href="{% url 'craft_remove' pk=craftpost.pk %}"><i class="fa fa-times"> Delete</i></a>
+                </div>
+            </div>
+        </div>
+
+         {% endif %}
+         <hr>
+           <div class="row">
+            <div class="col-md-6 col-lg-6">
+               <p class="text-right"> Comments </p>
+            </div>
+
+        </div>
+                {% for comment in craftpost.comments.all %}
+                {% if  comment.approved_comment %}
+    <div class="comment">
+        <div class="row">
+            <div class="col-md-6 col-lg-6">
+            <p><strong>{{ comment.name }}</strong></p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-right">
+                <div class="date">{{ comment.created_date }}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-6">
+                <p>{{ comment.text|safe }}</p>
+            </div>
+            <div class="col-md-6 col-lg-6 text-right">
+                {% if user.is_superuser %}
+                <a class="btn btn-default " href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                {% elif request.user == comment.author %}
+                <a class="btn btn-default pull-right" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+
+                {% endif %}
+            </div>
+        </div>
+        </div>
+        <!-- </div> -->
+        <hr>
+        {% elif not comment.approved_comment %}
+            {% if request.user == comment.author or user.is_superuser %}
+                    <!-- <div class="comment"> -->
+        <div class="comment">
+        <div class="row">
+            <div class="col-md-10 col-lg-10">
+                <p>Hi, <strong>{{ comment.name }}</strong></p>
+                <p>Your comment, created on {{ comment.created_date }} is pending approval:</p>
+                <p>{{ comment.text|safe }}</p>
+            </div>
+            <div class="col-md-2 col-lg-2 text-right">
+            <a class="btn btn-default " href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                {% if user.is_superuser %}
+            <a class="btn btn-default " href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
+                {% endif %} <!--endif for superuser-->
+            </div>
+        </div>
+    </div><!--end comment div-->
+            <hr>
+                    {% endif %}<!--endif for auth user or superuser -->
+                {% endif %}<!--endif for not comment-->
+
+                {% empty %}
+                <p>No comments here yet! What do you think?</p>
+                {% endfor %}
+                 <h1>New comment</h1>
+                    <form method="POST" class="post-form">{% csrf_token %}
+
+                    {% if not user.is_authenticated %}
+
+
+
+                    <p><label for="id_author">Author:</label> <input id="id_author" maxlength="200" name="author" type="text"></p>
+                    {% endif %}
+
+                        <p><label for="id_text">Text:</label> <textarea cols="40" id="id_text" name="text" rows="10"></textarea></p>
+
+                        <button type="submit" class="save btn btn-default">Send</button>
+                    </form>
+
+
+        </div><!--close row-->
+    </div><!--close post-->
+{% endblock %}

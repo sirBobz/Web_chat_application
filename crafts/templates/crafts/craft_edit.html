@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="post">
+	<div class="row">
+	<div class="col-md-12">
+    <h1>Got something good to share? Tell us!</h1>
+    <form method="POST" class="post-form" enctype="multipart/form-data" action=""/new/>{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+
+
+    </form>
+    </div>
+    </div>
+</div>
+    
+{% endblock %}

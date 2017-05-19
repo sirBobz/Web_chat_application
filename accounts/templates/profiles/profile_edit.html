@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+{% if form.errors %}
+<div class="row">
+    <div class="col-md-12">
+        <p> There's a problem with your registration, please <a href="mailto:rachell.calhoun@gmail.com">Contact us! </a>Sorry for the inconvenience!</p>
+    </div>
+</div>
+{% endif %}
+
+
+
+
+<div class="post">
+<div class="row">
+<form method="post" action="{% url 'accounts.views.profile_edit' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="center-block col-md-6 text-center">
+            <div class="center-block">
+                    <h4>{{form.picture.label_tag}}</h4>
+                    <h4>{{form.picture}}</h4>
+                    <h4>{{form.location.label_tag}}</h4>
+                    <h4>{{form.location}}</h4>
+                    <h4>{{form.hobby.label_tag}}</h4>
+                    <h4>{{form.hobby}}</h4>
+                     {{form.errors}}
+                     <button type="submit" class="save btn btn-default">Save</button>
+
+            </div>
+        </div>
+        </form>
+        <div class="col-md-6">
+        <h4 class="text-center"> <a href="/changepassword">Change Password</a></h4>
+        </div>
+    </div>
+</div>
+
+<!--
+
+<div class="post">
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="alreadyreg">You're already registered! You rock!</h1>
+    </div>
+</div>
+</div>-->
+
+
+{% endblock %}
