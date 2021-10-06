@@ -1,4 +1,4 @@
-Django==1.8
+django>=2.2.24
 pillow>=8.3.2
 django-endless-pagination==2.0
 django-postman==3.3.1
